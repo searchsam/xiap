@@ -1,31 +1,34 @@
-# Importar flask y plantillas de operadores
+# Import flask and template operators
 from flask import Flask, render_template
 
-# Importar SQLAlchemy
+# Import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
 
-# Importar modulo/componente usando la su variable (mod_auth)  del blueprint
-from app.mod_inicio.controllers import mod_inicio as inicio_module
-
-# Define el objeto de aplicacion WSGI
+# Define the WSGI application object
 app = Flask(__name__)
 
-# Configuraciones
+# Configurations
 app.config.from_object('config')
 
-# Define el objeto de base de datos que se desea importar
-# por los modulos y controloadores
+# Define the database object which is imported
+# by modules and controllers
 db = SQLAlchemy(app)
 
-# Ejemplo de como hacerse cargo de un error HTTP
+# Sample HTTP error handling
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
 
+# Import a module / component using its blueprint handler variable (mod_auth)
+from app.pool.controllers import pool
 
-# Registrar blueprint(s)
-app.register_blueprint(inicio_module)
+# Register blueprint(s)
+app.register_blueprint(pool)
+# app.register_blueprint(xyz_module)
+# ..
 
-# Construlledo la base de datos
-# Esto creara una base de datos usando SQLAlchemy
-# db.create_all()
+# Build the database:
+# This will create the database file using SQLAlchemy
+@app.cli.command()
+def initdb():
+    db.create_all()

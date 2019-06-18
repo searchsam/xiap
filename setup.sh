@@ -1,6 +1,12 @@
 #!/bin/sh
-sudo apt install python3-virtualenv
-python3 -m venv venv
-source venv/bin/activate
-pip freeze > requirements.txt
-python run.py
+# Instalar dependencias
+echo "Instalar dependencias"
+sudo dnf -y install python3 sqlite
+# Dependencias de python
+echo "Instalar requerimientos de python"
+pip3 install -r requirements.txt --user
+echo "Iniciar el flask"
+# Iniciar api
+# export AUTHLIB_INSECURE_TRANSPORT=1
+python3 -m flask initdb
+python3 run.py

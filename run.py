@@ -1,4 +1,4 @@
-# Ejecutar un servidor de prueba.
+#!/usr/bin/python3
+# Run a test server.
 from app import app
-# flask run --host=0.0.0.0
-app.run(host='0.0.0.0', port=5000, debug=True)
+app.run(host='0.0.0.0', port=8080, debug=True)

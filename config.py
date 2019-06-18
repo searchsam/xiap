@@ -1,33 +1,29 @@
+#!/usr/bin/python3
 import os
 
-# Sentencia para hablitar el modo de desarrollo
+# Statement for enabling the development environment
 DEBUG = True
 
-# Declaracion para el entorno de desarrollo
+# Define the application directory
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
-# Definir la base de datos - estamos trabajando con
-USR = ''
-PWD = ''
-DBN = ''
-
-# Coneccion con base de datos
-SQLALCHEMY_DATABASE_URI = ''
-
-SQLALCHEMY_TRACK_MODIFICATIONS = True
+# Define the database - we are working with
+# SQLite for this example
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'xark.db')
 DATABASE_CONNECT_OPTIONS = {}
 
-# Hilos de la aplicacion. Una suposicion general comun es
-# usar 4 por nucleos de procesamiento disponibles - para manejar
-# las peticiones entrantes utilizando uno y la realizacion de
-# operaciones en segundo plano utilizando la otra.
-THREADS_PER_PAGE = 4
+# Application threads. A common general assumption is
+# using 2 per available processor cores - to handle
+# incoming requests using one and performing background
+# operations using the other.
+THREADS_PER_PAGE = 2
 
-# Habilitar la proteccion contra *Cross-site Request Forgery (CSRF)*
+# Enable protection agains *Cross-site Request Forgery (CSRF)*
 CSRF_ENABLED = True
 
-# Utilizar una clave segura, unica y absolutamente privada para firmar los datos.
-CSRF_SESSION_KEY = 'secret'
+# Use a secure, unique and absolutely secret key for
+# signing the data.
+CSRF_SESSION_KEY = "secret"
 
-# clave secreta para las cookies
-SECRET_KEY = 'secret'
+# Secret key for signing cookies
+SECRET_KEY = "secret"
