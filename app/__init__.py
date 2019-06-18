@@ -4,6 +4,9 @@ from flask import Flask, render_template
 # Importar SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
 
+# Importar modulo/componente usando la su variable (mod_auth)  del blueprint
+from app.mod_inicio.controllers import mod_inicio as inicio_module
+
 # Define el objeto de aplicacion WSGI
 app = Flask(__name__)
 
@@ -19,8 +22,6 @@ db = SQLAlchemy(app)
 def not_found(error):
     return render_template('404.html'), 404
 
-# Importar modulo/componente usando la su variable (mod_auth)  del blueprint
-from app.mod_inicio.controllers import mod_inicio as inicio_module
 
 # Registrar blueprint(s)
 app.register_blueprint(inicio_module)

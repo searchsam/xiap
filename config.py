@@ -1,5 +1,4 @@
 import os
-import signal
 
 # Sentencia para hablitar el modo de desarrollo
 DEBUG = True
