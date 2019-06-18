@@ -9,4 +9,5 @@ A lot of XARK in a little puddle.
 
 ### Autenticacion
 
+* https://github.com/authlib/example-oauth2-server
 * https://www.adictosaltrabajo.com/2012/07/30/spring-mvc-api-rest-oauth-2/
