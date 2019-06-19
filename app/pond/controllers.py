@@ -9,7 +9,7 @@ from .models import db, User, OAuth2Client
 from .oauth2 import authorization, require_oauth
 
 # Define the blueprint: 'pond', set its url prefix: app.url/pond
-pool = Blueprint('pond', __name__, url_prefix='/pond')
+pond = Blueprint('pond', __name__, url_prefix='/pond')
 
 
 def current_user():
@@ -19,12 +19,12 @@ def current_user():
     return None
 
 # Set the route and accepted methods
-@pool.route('/', methods=['GET', 'POST'])
+@pond.route('/', methods=['GET', 'POST'])
 def signin():
     return 'Hola Mundo!'
 
 
-@pool.route('/', methods=('GET', 'POST'))
+@pond.route('/', methods=('GET', 'POST'))
 def home():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -43,13 +43,13 @@ def home():
     return render_template('home.html', user=user, clients=clients)
 
 
-@pool.route('/logout')
+@pond.route('/logout')
 def logout():
     del session['id']
     return redirect('/')
 
 
-@pool.route('/create_client', methods=('GET', 'POST'))
+@pond.route('/create_client', methods=('GET', 'POST'))
 def create_client():
     user = current_user()
     if not user:
@@ -68,7 +68,7 @@ def create_client():
     return redirect('/')
 
 
-@pool.route('/oauth/authorize', methods=['GET', 'POST'])
+@pond.route('/oauth/authorize', methods=['GET', 'POST'])
 def authorize():
     user = current_user()
     if request.method == 'GET':
@@ -87,17 +87,17 @@ def authorize():
     return authorization.create_authorization_response(grant_user=grant_user)
 
 
-@pool.route('/oauth/token', methods=['POST'])
+@pond.route('/oauth/token', methods=['POST'])
 def issue_token():
     return authorization.create_token_response()
 
 
-@pool.route('/oauth/revoke', methods=['POST'])
+@pond.route('/oauth/revoke', methods=['POST'])
 def revoke_token():
     return authorization.create_endpoint_response('revocation')
 
 
-@pool.route('/api/me')
+@pond.route('/api/me')
 @require_oauth('profile')
 def api_me():
     user = current_token.user

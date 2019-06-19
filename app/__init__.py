@@ -21,7 +21,7 @@ def not_found(error):
 
 # Import a module / component using its blueprint handler variable (pool)
 from app.pond.controllers import pond as pond_module
-from app.oauth2 import config_oauth
+from app.pond.oauth2 import config_oauth
 
 
 config_oauth(app)
