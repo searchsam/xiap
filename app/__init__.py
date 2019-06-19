@@ -1,5 +1,6 @@
-# Import flask and template operators
-from flask import Flask, render_template
+#!/usr/bin/python3
+# Import flask
+from flask import Flask
 
 # Import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
@@ -10,22 +11,23 @@ app = Flask(__name__)
 # Configurations
 app.config.from_object('config')
 
-# Define the database object which is imported
-# by modules and controllers
+# Define the database object which is imported by modules and controllers
 db = SQLAlchemy(app)
 
 # Sample HTTP error handling
 @app.errorhandler(404)
 def not_found(error):
-    return render_template('404.html'), 404
+    return '404', 404
 
-# Import a module / component using its blueprint handler variable (mod_auth)
-from app.pool.controllers import pool
+# Import a module / component using its blueprint handler variable (pool)
+from app.pond.controllers import pond as pond_module
+from app.oauth2 import config_oauth
 
+
+config_oauth(app)
 # Register blueprint(s)
-app.register_blueprint(pool)
-# app.register_blueprint(xyz_module)
-# ..
+app.register_blueprint(pond_module)
+
 
 # Build the database:
 # This will create the database file using SQLAlchemy
