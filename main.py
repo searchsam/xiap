@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask
 import json
 
 app = Flask(__name__)
@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return jsonify('Hello World!')
+    return 'Hello World!'
 
 
 @app.route('/data/<string:serialnum>/<string:uuid>')
