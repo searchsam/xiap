@@ -18,11 +18,6 @@ def current_user():
         return User.query.get(uid)
     return None
 
-# Set the route and accepted methods
-@pond.route('/', methods=['GET', 'POST'])
-def signin():
-    return 'Hola Mundo!'
-
 
 @pond.route('/', methods=('GET', 'POST'))
 def home():
@@ -40,7 +35,7 @@ def home():
         clients = OAuth2Client.query.filter_by(user_id=user.id).all()
     else:
         clients = []
-    return render_template('home.html', user=user, clients=clients)
+    return 'Hola {0} and {1}'.format(user, clients)
 
 
 @pond.route('/logout')
