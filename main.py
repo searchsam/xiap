@@ -1,19 +1,18 @@
-from flask import Flask
-import json
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/", methods=["GET"])
 def hello():
-    return 'Hello World!'
+    return "Hello World!"
 
 
-@app.route('/data/<string:serialnum>/<string:uuid>')
-def getData(serialnum, uuid):
-    data = dict()
-    data['serialnum'] = serialnum
-    data['uuid'] = uuid
-    with open('data.json', 'w') as outfile:
-        json.dump(data, outfile)
-    return 'Serial Number: {0} <br> UUID: {1}'.format(serialnum, uuid)
+@app.route("/data", methods=["POST"])
+def getData():
+    print("ruta")
+    if request.headers["Content-Type"] == "application/json":
+        print(request.json)
+        return jsonify(request.json)
+    else:
+        return jsonify(False), 500
