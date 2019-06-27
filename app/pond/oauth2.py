@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from authlib.flask.oauth2 import AuthorizationServer, ResourceProtector
 from authlib.flask.oauth2.sqla import (
     create_query_client_func,
@@ -27,7 +28,8 @@ class AuthorizationCodeGrant(grants.AuthorizationCodeGrant):
 
     def parse_authorization_code(self, code, client):
         item = OAuth2AuthorizationCode.query.filter_by(
-            code=code, client_id=client.client_id).first()
+            code=code, client_id=client.client_id
+        ).first()
         if item and not item.is_expired():
             return item
 
@@ -48,8 +50,14 @@ class PasswordGrant(grants.ResourceOwnerPasswordCredentialsGrant):
 
 class RefreshTokenGrant(grants.RefreshTokenGrant):
     def authenticate_refresh_token(self, refresh_token):
-        token = OAuth2Token.query.filter_by(refresh_token=refresh_token).first()
-        if token and not token.revoked and not token.is_refresh_token_expired():
+        token = OAuth2Token.query.filter_by(
+            refresh_token=refresh_token
+        ).first()
+        if (
+            token
+            and not token.revoked
+            and not token.is_refresh_token_expired()
+        ):
             return token
 
     def authenticate_user(self, credential):
@@ -59,8 +67,7 @@ class RefreshTokenGrant(grants.RefreshTokenGrant):
 query_client = create_query_client_func(db.session, OAuth2Client)
 save_token = create_save_token_func(db.session, OAuth2Token)
 authorization = AuthorizationServer(
-    query_client=query_client,
-    save_token=save_token,
+    query_client=query_client, save_token=save_token
 )
 require_oauth = ResourceProtector()
 
