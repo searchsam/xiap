@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 # Import flask
-import click
 from flask import Flask
 
 # Import SQLAlchemy
