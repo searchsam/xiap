@@ -35,3 +35,8 @@ app.register_blueprint(pond_module)
 @app.cli.command()
 def initdb():
     db.create_all()
+
+    from app.pond.models import User
+
+    db.session.add(User(username="olpc"))
+    db.session.commit()
