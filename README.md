@@ -1,9 +1,45 @@
 # xiap
+
 A lot of XARK in a little pond.
 
-$ curl -u ${client_id}:${client_secret} -XPOST http://127.0.0.1:5000/oauth/token -F grant_type=password -F username=${username} -F password=valid -F scope=profile
+## Flask
 
-{"client_id": "VBX27CNWNEQaZ60EAyujVtYv", "client_id_issued_at": 1560988156, "client_secret": "cfPcwZM41pJnfWV1VcAZu2pj7VCG3605sRHypEN0FZ35KPw7", "client_secret_expires_at": 0}
-{"client_name": "Hi", "client_uri": "https://fundacionzt.org/", "contacts": [], "grant_types": ["authorization_code", "password"], "jwks": null, "jwks_uri": null, "logo_uri": null, "policy_uri": null, "redirect_uris": ["https://fundacionzt.org/"], "response_types": ["code"], "scope": "profile", "token_endpoint_auth_method": "client_secret_basic", "tos_uri": null}
+Instalar flask
 
-curl -X POST -d "client_id=VBX27CNWNEQaZ60EAyujVtYv&client_secret=cfPcwZM41pJnfWV1VcAZu2pj7VCG3605sRHypEN0FZ35KPw7&grant_type=password" http://127.0.0.1:5000/oauth/token
+## PostgreSQL
+
+```bash
+$ sudo dnf -y install postgresql postgresql-server # instalar postgres
+$ postgresql-setup --initdb # Iniciar el cluster
+$ sudo systemctl start postgresql.service # Iniciar el motor como servicio
+$ sudo systemctl enable postgresql  # Activar el inicio al arrancar el sistema
+$ sudo su - postgres    # Carbiar a la consola del usuario postgres
+$ psql  # Loguearse en la consola del servidor postgres
+=# \password (Escribir la contraseña dos veces. `temporalmentepacapaca`) # Asignar contraseña al usuario postgres
+=# \q
+# =============================================================================
+=# CREATE USER ponduser WITH PASSWORD 'xarktank';
+=# GRANT ALL PRIVILEGES ON DATABASE xiap to ponduser;
+=# CREATE DATABASE xiap WITH OWNER ponduser;
+=# \q
+# =============================================================================
+$ createuser ponduser -P
+$ createdb xiap --owner ponduser
+CONFILE = $(psql -U postgres -c 'SHOW config_file')
+$ sudo vim /etc/postgres/10/main/pg_hba.conf
+    Cambiar:
+    local   all    all                    peer
+    host    all    all    127.0.0.1/32    peer
+    Por:
+    local   all    all                    md5
+    host    all    all    0.0.0.0/0       md5
+
+$ sudo vim /etc/postgres/10/main/postgres.conf    
+    Cambiar:
+    # listen_addresses = 'localhost'
+    Por:
+    listen_addresses = '*'
+
+$ sudo systemctl restart postgresql
+e8262ad87bde192dc6840b3caf1957b42282f6f8d20589e5e21949bb73ac5725
+```

@@ -8,7 +8,7 @@ from authlib.flask.oauth2.sqla import (
 )
 from authlib.oauth2.rfc6749 import grants
 from werkzeug.security import gen_salt
-from .models import db, User
+from .models import db, OAuth2User
 from .models import OAuth2Client, OAuth2AuthorizationCode, OAuth2Token
 
 
@@ -38,12 +38,12 @@ class AuthorizationCodeGrant(grants.AuthorizationCodeGrant):
         db.session.commit()
 
     def authenticate_user(self, authorization_code):
-        return User.query.get(authorization_code.user_id)
+        return OAuth2User.query.get(authorization_code.user_id)
 
 
 class PasswordGrant(grants.ResourceOwnerPasswordCredentialsGrant):
     def authenticate_user(self, username, password):
-        user = User.query.filter_by(username=username).first()
+        user = OAuth2User.query.filter_by(username=username).first()
         if user.check_password(password):
             return user
 
@@ -61,7 +61,7 @@ class RefreshTokenGrant(grants.RefreshTokenGrant):
             return token
 
     def authenticate_user(self, credential):
-        return User.query.get(credential.user_id)
+        return OAuth2User.query.get(credential.user_id)
 
 
 query_client = create_query_client_func(db.session, OAuth2Client)

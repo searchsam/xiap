@@ -3,7 +3,7 @@
 from flask import Blueprint, request, session
 from flask import jsonify
 from authlib.oauth2 import OAuth2Error
-from .models import db, User, OAuth2Client
+from .models import db, OAuth2User, OAuth2Client
 from .oauth2 import authorization
 
 # Define the blueprint: 'pond', set its url prefix: app.url/pond
@@ -13,14 +13,14 @@ pond = Blueprint("pond", __name__, url_prefix="/pond")
 def current_user():
     uid = session["id"]
 
-    return User.query.get(uid)
+    return OAuth2User.query.get(uid)
 
 
 @pond.route("/", methods=["POST"])
 def home():
     if request.method == "POST":
         username = request.form.get("user")
-        user = User.query.filter_by(username=username).first()
+        user = OAuth2User.query.filter_by(username=username).first()
 
         session["id"] = user.id
 

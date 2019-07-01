@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-# Import flask
-from flask import Flask
+import click
+import hashlib
+from flask import Flask, jsonify
 
 # Import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
@@ -32,11 +33,22 @@ app.register_blueprint(pond_module)
 
 # Build the database:
 # This will create the database file using SQLAlchemy
-@app.cli.command()
+@app.cli.command("initdb")
 def initdb():
     db.create_all()
 
-    from app.pond.models import User
+    from app.pond.models import OAuth2User
 
-    db.session.add(User(username="olpc"))
+    db.session.add(OAuth2User(username="olpc"))
     db.session.commit()
+
+
+@app.cli.command("breakdb")
+def breakdb():
+    db.drop_all()
+
+
+@app.cli.command("ncrypt")
+@click.argument("string")
+def ncrypt(string):
+    print(hashlib.sha256(string.encode()).hexdigest())
