@@ -8,16 +8,14 @@ DEBUG = True
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # Define the database
-SERVER = "192.168.0.4"  # ip local
-# SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'xiap.db')
+SERVER = "10.0.11.33"  # ip local
 SQLALCHEMY_DATABASE_URI = "postgresql://ponduser:e8262ad87bde192dc6840b3caf1957b42282f6f8d20589e5e21949bb73ac5725@{}/xiap".format(
     SERVER
 )
-
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 DATABASE_CONNECT_OPTIONS = {}
 
-
+# OAuth 2.0 token generator
 OAUTH2_REFRESH_TOKEN_GENERATOR = True
 
 # Application threads.
