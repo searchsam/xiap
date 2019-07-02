@@ -3,7 +3,11 @@
 # Import the database object (db) from the main application module
 import time
 from app import db
-from authlib.flask.oauth2.sqla import OAuth2ClientMixin, OAuth2TokenMixin
+from authlib.flask.oauth2.sqla import (
+    OAuth2ClientMixin,
+    OAuth2AuthorizationCodeMixin,
+    OAuth2TokenMixin,
+)
 
 
 class OAuth2User(db.Model):
@@ -26,6 +30,16 @@ class OAuth2Client(db.Model, OAuth2ClientMixin):
     __tablename__ = "xp_oauth2_client"
 
     id_client = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(
+        db.Integer, db.ForeignKey("xp_oauth2_user.id_user", ondelete="CASCADE")
+    )
+    user = db.relationship("OAuth2User")
+
+
+class OAuth2AuthorizationCode(db.Model, OAuth2AuthorizationCodeMixin):
+    __tablename__ = "xp_oauth2_code"
+
+    id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(
         db.Integer, db.ForeignKey("xp_oauth2_user.id_user", ondelete="CASCADE")
     )

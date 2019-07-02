@@ -46,6 +46,7 @@ def initdb():
 @app.cli.command("breakdb")
 def breakdb():
     db.drop_all()
+    initdb()
 
 
 @app.cli.command("ncrypt")
