@@ -15,9 +15,6 @@ SQLALCHEMY_DATABASE_URI = "postgresql://ponduser:e8262ad87bde192dc6840b3caf1957b
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 DATABASE_CONNECT_OPTIONS = {}
 
-# OAuth 2.0 token generator
-OAUTH2_REFRESH_TOKEN_GENERATOR = True
-
 # Application threads.
 # A common general assumption is using 2 per available processor cores
 # to handle incoming requests using one and performing background
