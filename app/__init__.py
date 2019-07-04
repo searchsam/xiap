@@ -43,16 +43,23 @@ def initdb():
     db.session.add(OAuth2User(username="olpc"))
     db.session.commit()
 
+    click.echo("Init the db")
+
 
 @app.cli.command("breakdb")
 def breakdb():
     """Delete all tables and repopulate XAIP database."""
     db.drop_all()
+
+    from app.cli import initdb
+
     initdb()
+    click.echo("Init the db")
 
 
 @app.cli.command("ncrypt")
 @click.argument("string")
 def ncrypt(string):
     """Sha256 ncrypt a string."""
-    print(hashlib.sha256(string.encode()).hexdigest())
+    click.echo(hashlib.sha256(string.encode()).hexdigest())
+    # print(hashlib.sha256(string.encode()).hexdigest())
