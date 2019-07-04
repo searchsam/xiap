@@ -3,7 +3,15 @@
 from flask import Blueprint, request, session
 from flask import jsonify
 from authlib.oauth2 import OAuth2Error
-from .models import db, OAuth2User, OAuth2Client
+from .models import (
+    db,
+    OAuth2User,
+    OAuth2Client,
+    JournalXO,
+    DataXO,
+    Excepts,
+    Status,
+)
 from .oauth2 import authorization
 
 # Define the blueprint: 'pond', set its url prefix: app.url/pond
@@ -50,11 +58,78 @@ def home():
 
 
 @pond.route("/data", methods=["POST"])
-def data():
+def statusdata():
     if request.method == "POST":
         authorization.create_token_response()
 
-        print(request.form.get("data"))
+        if request.form.get("data") is not None:
+            print(request.form.get("data"))
+
+            status = Status(
+                client_id="",
+                date_print="",
+                sync_status="",
+                collect_status="",
+                sync_date="",
+                collect_date="",
+                create_at="",
+                update_at="",
+            )
+            db.session.add(status)
+
+            journal = JournalXO(
+                client_id="",
+                activity="",
+                activity_id="",
+                checksum="",
+                creation_time="",
+                file_size="",
+                icon_color="",
+                keep="",
+                launch_times="",
+                mime_type="",
+                mountpoint="",
+                mtime="",
+                share_scope="",
+                spent_times="",
+                time_stamp="",
+                title="",
+                title_set_by_user="",
+                uid="",
+                create_at="",
+                update_at="",
+            )
+            db.session.add(journal)
+
+            data = DataXO(
+                client_id="",
+                activities_history="",
+                ram="",
+                rom="",
+                kernel="",
+                arqc="",
+                mac="",
+                create_at="",
+                update_at="",
+            )
+            db.session.add(data)
+
+            excepts = Excepts(
+                client_id="",
+                except_type="",
+                except_messg="",
+                file_name="",
+                file_line="",
+                except_code="",
+                tb_except="",
+                server_name="",
+                user_name="",
+                create_at="",
+                update_at="",
+            )
+            db.session.add(excepts)
+
+            db.session.commit()
 
         # authorization.create_endpoint_response("revocation")
         # del session["id"]
