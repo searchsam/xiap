@@ -7,6 +7,7 @@ echo "Instalar requerimientos de python"
 sudo pip3 install -r requirements.txt
 echo "Iniciar el flask"
 # Iniciar api
+export FLASK_ENV=development
 export FLASK_APP=run.py
 export AUTHLIB_INSECURE_TRANSPORT=1
 # Inicio del servidor

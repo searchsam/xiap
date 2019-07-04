@@ -35,6 +35,7 @@ app.register_blueprint(pond_module)
 # This will create the database file using SQLAlchemy
 @app.cli.command("initdb")
 def initdb():
+    """Populate XIAP database."""
     db.create_all()
 
     from app.pond.models import OAuth2User
@@ -45,6 +46,7 @@ def initdb():
 
 @app.cli.command("breakdb")
 def breakdb():
+    """Delete all tables and repopulate XAIP database."""
     db.drop_all()
     initdb()
 
@@ -52,4 +54,5 @@ def breakdb():
 @app.cli.command("ncrypt")
 @click.argument("string")
 def ncrypt(string):
+    """Sha256 ncrypt a string."""
     print(hashlib.sha256(string.encode()).hexdigest())
