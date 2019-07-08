@@ -2,6 +2,7 @@
 
 # Import the database object (db) from the main application module
 import time
+import datetime
 from app import db
 from authlib.flask.oauth2.sqla import (
     OAuth2ClientMixin,
@@ -20,7 +21,7 @@ class OAuth2User(db.Model):
         return self.username
 
     def get_user_id(self):
-        return self.id
+        return self.id_user
 
     def check_password(self, password):
         return password == "valid"
@@ -68,6 +69,7 @@ class JournalXO(db.Model):
         db.Integer,
         db.ForeignKey("xp_oauth2_client.id_client", ondelete="CASCADE"),
     )
+    xark_status_id = db.Column(db.Integer)
     activity = db.Column(db.String)
     activity_id = db.Column(db.String)
     checksum = db.Column(db.String)
@@ -76,17 +78,19 @@ class JournalXO(db.Model):
     icon_color = db.Column(db.String)
     keep = db.Column(db.String)
     launch_times = db.Column(db.String)
-    mime_type = db.Column(db.DateTime)
+    mime_type = db.Column(db.String)
     mountpoint = db.Column(db.String)
-    mtime = db.Column(db.String)
+    mtime = db.Column(db.DateTime)
     share_scope = db.Column(db.String)
     spent_times = db.Column(db.String)
     time_stamp = db.Column(db.String)
     title = db.Column(db.String)
     title_set_by_user = db.Column(db.String)
     uid = db.Column(db.String)
-    create_at = db.Column(db.DateTime)
-    update_at = db.Column(db.DateTime)
+    xk_create_at = db.Column(db.DateTime)
+    xk_update_at = db.Column(db.DateTime)
+    create_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    update_at = db.Column(db.DateTime, default=datetime.datetime.now())
 
     def __repr__(self):
         return "<Journal_Id %r>" % self.id_journal_xo
@@ -100,14 +104,17 @@ class DataXO(db.Model):
         db.Integer,
         db.ForeignKey("xp_oauth2_client.id_client", ondelete="CASCADE"),
     )
+    xark_status_id = db.Column(db.Integer)
     activities_history = db.Column(db.String)
     ram = db.Column(db.String)
     rom = db.Column(db.String)
     kernel = db.Column(db.String)
     arqc = db.Column(db.String)
     mac = db.Column(db.String)
-    create_at = db.Column(db.DateTime)
-    update_at = db.Column(db.DateTime)
+    xk_create_at = db.Column(db.DateTime)
+    xk_update_at = db.Column(db.DateTime)
+    create_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    update_at = db.Column(db.DateTime, default=datetime.datetime.now())
 
     def __repr__(self):
         return "<Data_Id %r>" % self.id_data_xo
@@ -129,8 +136,10 @@ class Excepts(db.Model):
     tb_except = db.Column(db.String)
     server_name = db.Column(db.String)
     user_name = db.Column(db.String)
-    create_at = db.Column(db.DateTime)
-    update_at = db.Column(db.DateTime)
+    xk_create_at = db.Column(db.DateTime)
+    xk_update_at = db.Column(db.DateTime)
+    create_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    update_at = db.Column(db.DateTime, default=datetime.datetime.now())
 
     def __repr__(self):
         return "<Excepts %r>" % self.id_data_xo
@@ -147,10 +156,12 @@ class Status(db.Model):
     date_print = db.Column(db.Integer)
     sync_status = db.Column(db.Boolean)
     collect_status = db.Column(db.Boolean)
-    sync_date = db.Column(db.DateTime)
+    sync_date = db.Column(db.DateTime, default=datetime.datetime.now())
     collect_date = db.Column(db.DateTime)
-    create_at = db.Column(db.DateTime)
-    update_at = db.Column(db.DateTime)
+    xk_create_at = db.Column(db.DateTime)
+    xk_update_at = db.Column(db.DateTime)
+    create_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    update_at = db.Column(db.DateTime, default=datetime.datetime.now())
 
     def __repr__(self):
         return "<Status %r>" % self.id_status
@@ -167,8 +178,10 @@ class Dump(db.Model):
     dp_to = db.Column(db.Integer)
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
-    create_at = db.Column(db.DateTime)
-    update_at = db.Column(db.DateTime)
+    xk_create_at = db.Column(db.DateTime)
+    xk_update_at = db.Column(db.DateTime)
+    create_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    update_at = db.Column(db.DateTime, default=datetime.datetime.now())
 
     def __repr__(self):
         return "<Dump %r>" % self.id_dump

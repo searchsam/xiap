@@ -43,18 +43,14 @@ def initdb():
     db.session.add(OAuth2User(username="olpc"))
     db.session.commit()
 
-    click.echo("Init the db")
+    click.echo("Initialized DataBase")
 
 
 @app.cli.command("breakdb")
 def breakdb():
     """Delete all tables and repopulate XAIP database."""
     db.drop_all()
-
-    from app.cli import initdb
-
-    initdb()
-    click.echo("Init the db")
+    click.echo("Interrupted DataBase")
 
 
 @app.cli.command("ncrypt")
