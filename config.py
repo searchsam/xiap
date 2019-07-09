@@ -8,9 +8,12 @@ DEBUG = True
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # Define the database
-SERVER = "192.168.0.2"  # server ip
-SQLALCHEMY_DATABASE_URI = "postgresql://ponduser:e8262ad87bde192dc6840b3caf1957b42282f6f8d20589e5e21949bb73ac5725@{}/xiap".format(
-    SERVER
+HOST = "192.168.0.6"
+USER = "ponduser"
+PASSD = "e8262ad87bde192dc6840b3caf1957b42282f6f8d20589e5e21949bb73ac5725"
+DB = "xiap"
+SQLALCHEMY_DATABASE_URI = "postgresql://{user}:{password}@{host}/{db}".format(
+    user=USER, password=PASSD, host=HOST, db=DB
 )
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 DATABASE_CONNECT_OPTIONS = {}

@@ -170,7 +170,7 @@ class Status(db.Model):
 class Dump(db.Model):
     __tablename__ = "xp_dump"
 
-    id_status = db.Column(db.Integer, primary_key=True)
+    id_dump = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(
         db.Integer, db.ForeignKey("xp_oauth2_user.id_user", ondelete="CASCADE")
     )
@@ -178,8 +178,6 @@ class Dump(db.Model):
     dp_to = db.Column(db.Integer)
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
-    xk_create_at = db.Column(db.DateTime)
-    xk_update_at = db.Column(db.DateTime)
     create_at = db.Column(db.DateTime, default=datetime.datetime.now())
     update_at = db.Column(db.DateTime, default=datetime.datetime.now())
 

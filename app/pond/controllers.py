@@ -26,6 +26,27 @@ def current_client(client_id):
         return None
 
 
+def valid_status(client, status_data):
+    print(status_data)
+    status = Status.query.filter_by(date_print=status_data[0]).first()
+    if not status:
+        status = Status(
+            client_id=client.id_client,
+            date_print=status_data[0],
+            sync_status=True,
+            collect_status=bool(status_data[1]),
+            collect_date=status_data[2],
+            xk_create_at=status_data[3],
+            xk_update_at=status_data[4],
+        )
+        db.session.add(status)
+        db.session.commit()
+        db.session.flush()
+        return status
+    else:
+        return status
+
+
 @pond.route("/", methods=["POST"])
 def home():
     if request.method == "POST":
@@ -37,7 +58,7 @@ def home():
         client = OAuth2Client.query.filter_by(client_id=client_id).first()
         if not client:
             session["client"] = client_id
-            session.modified = True
+
             client = OAuth2Client(**request.form.to_dict(flat=True))
             client.client_id = client_id
             client.client_name = client_id
@@ -51,7 +72,6 @@ def home():
             db.session.commit()
         else:
             session["client"] = client.client_id
-            session.modified = True
 
         try:
             authorization.validate_consent_request(end_user=user)
@@ -73,21 +93,10 @@ def statusdata():
             data = json.loads(json_string)
             client = current_client(request.form.get("client"))
 
-            if data["status"] is None:
-                status = Status(
-                    client_id=client.id_client,
-                    date_print=data["status"][0],
-                    sync_status=True,
-                    collect_status=bool(data["status"][1]),
-                    collect_date=data["status"][2],
-                    xk_create_at=data["status"][3],
-                    xk_update_at=data["status"][4],
-                )
-                db.session.add(status)
-                db.session.commit()
-                db.session.flush()
+            if data["status"] is not None:
+                status = valid_status(client, data["status"])
 
-                if data["journal"] is not None:
+                if data["journal"] is not None and status:
                     journal = list()
                     for l in data["journal"]:
                         journal.append(
@@ -117,7 +126,7 @@ def statusdata():
                         )
                     db.session.bulk_insert_mappings(JournalXO, journal)
 
-                if data["device"] is not None:
+                if data["device"] is not None and status:
                     db.session.add(
                         DataXO(
                             client_id=client.id_client,
@@ -133,7 +142,7 @@ def statusdata():
                         )
                     )
 
-                if data["excepts"] is not None:
+                if data["excepts"] is not None and status:
                     excepts = list()
                     for l in data["excepts"]:
                         excepts.append(
@@ -154,6 +163,8 @@ def statusdata():
                     db.session.bulk_insert_mappings(Excepts, excepts)
 
                 db.session.commit()
+            else:
+                return jsonify(False), 500
 
         authorization.create_endpoint_response("revocation")
         # del session
