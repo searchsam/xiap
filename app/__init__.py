@@ -4,8 +4,10 @@ import avro
 import json
 import time
 import click
+import pyudev
 import hashlib
 import datetime
+import subprocess
 
 import avro.schema
 
@@ -85,6 +87,37 @@ def dumpb():
         DataXO,
         Excepts,
     )
+
+    context = pyudev.Context()
+    monitor = pyudev.Monitor.from_netlink(context)
+    monitor.filter_by("block")
+
+    device_num = list()
+    for device in context.list_devices(subsystem="block", DEVTYPE="partition"):
+        if device.get("ID_FS_LABEL") is not None:
+            device_num.append(device.device_node)
+
+    print(device_num)
+    if len(device_num) > 1 or len(device_num) < 1:
+        click.echo("Mas de un dispocitivo usb conectado.")
+        return jsonify(False), 500
+
+    subprocess.Popen(
+        "sudo mount {} /tmp/usb".format(device_num[0]),
+        shell=True,
+        stdout=subprocess.PIPE,
+    ).stdout.readlines()
+
+    salida = subprocess.Popen(
+        "ls /tmp/usb | grep .avro", shell=True, stdout=subprocess.PIPE
+    ).stdout.readlines()
+    print(salida)
+
+    # subprocess.Popen(
+    #     "mkfs -t ntfs -F -Q -L 'DATA' {}".format(device_num[0]),
+    #     shell=True,
+    #     stdout=subprocess.PIPE,
+    # ).stdout.readlines()
 
     data = dict()
     # Read Schema for data order
