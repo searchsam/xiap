@@ -43,3 +43,7 @@ $ sudo vim /etc/postgres/10/main/postgres.conf
 $ sudo systemctl restart postgresql
 e8262ad87bde192dc6840b3caf1957b42282f6f8d20589e5e21949bb73ac5725
 ```
+
+## Resources
+
+- <https://pythontic.com/serialization/apache%20avro/write%20data>

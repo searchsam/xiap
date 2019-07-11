@@ -80,17 +80,23 @@ class JournalXO(db.Model):
     launch_times = db.Column(db.String)
     mime_type = db.Column(db.String)
     mountpoint = db.Column(db.String)
-    mtime = db.Column(db.DateTime)
+    mtime = db.Column(db.String)
     share_scope = db.Column(db.String)
     spent_times = db.Column(db.String)
     time_stamp = db.Column(db.String)
     title = db.Column(db.String)
     title_set_by_user = db.Column(db.String)
     uid = db.Column(db.String)
-    xk_create_at = db.Column(db.DateTime)
-    xk_update_at = db.Column(db.DateTime)
-    create_at = db.Column(db.DateTime, default=datetime.datetime.now())
-    update_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    xk_create_at = db.Column(db.String)
+    xk_update_at = db.Column(db.String)
+    create_at = db.Column(
+        db.Integer,
+        default=int(time.mktime(datetime.datetime.now().timetuple())),
+    )
+    update_at = db.Column(
+        db.Integer,
+        default=int(time.mktime(datetime.datetime.now().timetuple())),
+    )
 
     def __repr__(self):
         return "<Journal_Id %r>" % self.id_journal_xo
@@ -111,10 +117,16 @@ class DataXO(db.Model):
     kernel = db.Column(db.String)
     arqc = db.Column(db.String)
     mac = db.Column(db.String)
-    xk_create_at = db.Column(db.DateTime)
-    xk_update_at = db.Column(db.DateTime)
-    create_at = db.Column(db.DateTime, default=datetime.datetime.now())
-    update_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    xk_create_at = db.Column(db.String)
+    xk_update_at = db.Column(db.String)
+    create_at = db.Column(
+        db.Integer,
+        default=int(time.mktime(datetime.datetime.now().timetuple())),
+    )
+    update_at = db.Column(
+        db.Integer,
+        default=int(time.mktime(datetime.datetime.now().timetuple())),
+    )
 
     def __repr__(self):
         return "<Data_Id %r>" % self.id_data_xo
@@ -136,10 +148,16 @@ class Excepts(db.Model):
     tb_except = db.Column(db.String)
     server_name = db.Column(db.String)
     user_name = db.Column(db.String)
-    xk_create_at = db.Column(db.DateTime)
-    xk_update_at = db.Column(db.DateTime)
-    create_at = db.Column(db.DateTime, default=datetime.datetime.now())
-    update_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    xk_create_at = db.Column(db.String)
+    xk_update_at = db.Column(db.String)
+    create_at = db.Column(
+        db.Integer,
+        default=int(time.mktime(datetime.datetime.now().timetuple())),
+    )
+    update_at = db.Column(
+        db.Integer,
+        default=int(time.mktime(datetime.datetime.now().timetuple())),
+    )
 
     def __repr__(self):
         return "<Excepts %r>" % self.id_data_xo
@@ -156,12 +174,21 @@ class Status(db.Model):
     date_print = db.Column(db.Integer)
     sync_status = db.Column(db.Boolean)
     collect_status = db.Column(db.Boolean)
-    sync_date = db.Column(db.DateTime, default=datetime.datetime.now())
-    collect_date = db.Column(db.DateTime)
-    xk_create_at = db.Column(db.DateTime)
-    xk_update_at = db.Column(db.DateTime)
-    create_at = db.Column(db.DateTime, default=datetime.datetime.now())
-    update_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    sync_date = db.Column(
+        db.Integer,
+        default=int(time.mktime(datetime.datetime.now().timetuple())),
+    )
+    collect_date = db.Column(db.String)
+    xk_create_at = db.Column(db.String)
+    xk_update_at = db.Column(db.String)
+    create_at = db.Column(
+        db.Integer,
+        default=int(time.mktime(datetime.datetime.now().timetuple())),
+    )
+    update_at = db.Column(
+        db.Integer,
+        default=int(time.mktime(datetime.datetime.now().timetuple())),
+    )
 
     def __repr__(self):
         return "<Status %r>" % self.id_status
@@ -178,8 +205,14 @@ class Dump(db.Model):
     dp_to = db.Column(db.Integer)
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
-    create_at = db.Column(db.DateTime, default=datetime.datetime.now())
-    update_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    create_at = db.Column(
+        db.Integer,
+        default=int(time.mktime(datetime.datetime.now().timetuple())),
+    )
+    update_at = db.Column(
+        db.Integer,
+        default=int(time.mktime(datetime.datetime.now().timetuple())),
+    )
 
     def __repr__(self):
         return "<Dump %r>" % self.id_dump

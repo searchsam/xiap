@@ -27,7 +27,6 @@ def current_client(client_id):
 
 
 def valid_status(client, status_data):
-    print(status_data)
     status = Status.query.filter_by(date_print=status_data[0]).first()
     if not status:
         status = Status(
@@ -163,6 +162,7 @@ def statusdata():
                     db.session.bulk_insert_mappings(Excepts, excepts)
 
                 db.session.commit()
+                db.session.flush()
             else:
                 return jsonify(False), 500
 
