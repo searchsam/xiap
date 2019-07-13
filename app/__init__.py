@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+import os
+import re
 import avro
 import json
 import time
@@ -97,10 +99,14 @@ def dumpb():
         if device.get("ID_FS_LABEL") is not None:
             device_num.append(device.device_node)
 
-    print(device_num)
     if len(device_num) > 1 or len(device_num) < 1:
         click.echo("Mas de un dispocitivo usb conectado.")
         return jsonify(False), 500
+
+    if not os.path.isdir("/tmp/usb"):
+        subprocess.Popen(
+            "mkdir /tmp/usb", shell=True, stdout=subprocess.PIPE
+        ).stdout.readlines()
 
     subprocess.Popen(
         "sudo mount {} /tmp/usb".format(device_num[0]),
@@ -108,16 +114,68 @@ def dumpb():
         stdout=subprocess.PIPE,
     ).stdout.readlines()
 
-    salida = subprocess.Popen(
+    try:
+        subprocess.Popen(
+            "lsblk | grep {}".format(device_num[0][5:]),
+            shell=True,
+            stdout=subprocess.PIPE,
+        ).stdout.readlines()
+    except ():
+        click.echo("La usb no se a montado adecuadamente o esta dañada.")
+        return jsonify(False), 500
+
+    files = subprocess.Popen(
         "ls /tmp/usb | grep .avro", shell=True, stdout=subprocess.PIPE
     ).stdout.readlines()
-    print(salida)
 
-    # subprocess.Popen(
-    #     "mkfs -t ntfs -F -Q -L 'DATA' {}".format(device_num[0]),
-    #     shell=True,
-    #     stdout=subprocess.PIPE,
-    # ).stdout.readlines()
+    if len(files) >= 1:
+        avro_valid_files = list()
+        for i in files:
+            m = re.search(
+                r"[A-Z0-9]+_[a-z]+_[0-9]+.avro",
+                "/tmp/usb/" + i.decode().strip(),
+            )
+            if m is not None:
+                avro_valid_files.append(i.decode().strip())
+
+        if len(avro_valid_files) >= 1:
+            time_print_valid = list()
+            for n in avro_valid_files:
+                d = datetime.datetime.fromtimestamp(
+                    os.stat("/tmp/usb/{}".format(n)).st_mtime
+                )
+                if (datetime.datetime.now() - d).days < 30:
+                    time_print_valid.append(n)
+
+            if len(time_print_valid) < 1:
+                subprocess.Popen(
+                    "sudo umount /tmp/usb", shell=True, stdout=subprocess.PIPE
+                ).stdout.readlines()
+                subprocess.Popen(
+                    "mkfs -t ntfs -F -Q -L 'DATA' {}".format(device_num[0]),
+                    shell=True,
+                    stdout=subprocess.PIPE,
+                ).stdout.readlines()
+                subprocess.Popen(
+                    "sudo mount {} /tmp/usb".format(device_num[0]),
+                    shell=True,
+                    stdout=subprocess.PIPE,
+                ).stdout.readlines()
+
+    else:
+        subprocess.Popen(
+            "sudo umount /tmp/usb", shell=True, stdout=subprocess.PIPE
+        ).stdout.readlines()
+        subprocess.Popen(
+            "mkfs -t ntfs -F -Q -L 'DATA' {}".format(device_num[0]),
+            shell=True,
+            stdout=subprocess.PIPE,
+        ).stdout.readlines()
+        subprocess.Popen(
+            "sudo mount {} /tmp/usb".format(device_num[0]),
+            shell=True,
+            stdout=subprocess.PIPE,
+        ).stdout.readlines()
 
     data = dict()
     # Read Schema for data order
@@ -368,8 +426,21 @@ def dumpb():
     # Parse the AVRO SCHEMA file
     SCHEMA = avro.schema.Parse(open("app/schema.avsc", "rb").read())
     # Create a data file using AVRO DataFileWriter
-    dataFile = open("puddle.avro", "wb")
+    dataFile = open(
+        "/tmp/usb/"
+        + "SchoolCode"
+        + "_"
+        + os.uname()[1]
+        + "_"
+        + str(int(time.time()))
+        + ".avro",
+        "wb",
+    )
     writer = DataFileWriter(dataFile, DatumWriter(), SCHEMA)
     # Write data using DatumWriter
     writer.append(data)
     writer.close()
+
+    subprocess.Popen(
+        "sudo umount /tmp/usb", shell=True, stdout=subprocess.PIPE
+    ).stdout.readlines()
