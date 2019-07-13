@@ -47,3 +47,6 @@ e8262ad87bde192dc6840b3caf1957b42282f6f8d20589e5e21949bb73ac5725
 ## Resources
 
 - <https://pythontic.com/serialization/apache%20avro/write%20data>
+- <https://github.com/Psalms23/rxpy-flask-api>
+- <https://github.com/authlib/example-oauth2-server>
+- <https://www.adictosaltrabajo.com/2012/07/30/spring-mvc-api-rest-oauth-2/>
