@@ -14,6 +14,8 @@ from .models import (
 from .oauth2 import authorization
 import os
 import json
+import pyudev
+import hashlib
 
 # Define the blueprint: 'pond', set its url prefix: app.url/pond
 pond = Blueprint("pond", __name__, url_prefix="/pond")
@@ -169,6 +171,27 @@ def statusdata():
         authorization.create_endpoint_response("revocation")
         # del session
 
-        return jsonify(True), 200
+        return jsonify(True), 500
+    else:
+        return jsonify(False), 500
+
+
+@pond.route("/checkusb", methods=["GET"])
+def checkusb():
+    if request.method == "GET":
+        context = pyudev.Context()
+        monitor = pyudev.Monitor.from_netlink(context)
+        monitor.filter_by("block")
+        device_num = list()
+        for device in context.list_devices(
+            subsystem="block", DEVTYPE="partition"
+        ):
+            if device.get("ID_FS_LABEL") is not None:
+                device_num.append(device.device_node)
+
+        if len(device_num) > 1 or len(device_num) < 1:
+            return jsonify("Mas de un dispocitivo usb conectado."), 500
+
+        return jsonify("Good")
     else:
         return jsonify(False), 500
