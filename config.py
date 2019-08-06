@@ -8,7 +8,7 @@ DEBUG = True
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # Define the database
-HOST = "192.168.0.9"
+HOST = "192.168.0.10"
 USER = "ponduser"
 PASSD = "e8262ad87bde192dc6840b3caf1957b42282f6f8d20589e5e21949bb73ac5725"
 DB = "xiap"
